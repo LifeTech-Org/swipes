@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "tailwind": "npx tailwindcss -o ./dist/output.css --watch"
+    "tailwind": "npx tailwindcss -o ./src/dist/output.css --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
