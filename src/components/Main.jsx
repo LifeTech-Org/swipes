@@ -1,17 +1,10 @@
-import One from "../assets/One.png";
-import Two from "../assets/Two.png";
-import Three from "../assets/Three.png";
-import Four from "../assets/Four.png";
-import Five from "../assets/Five.png";
-import Six from "../assets/Six.png";
 import { useContext, useEffect, useState } from "react";
 import { tns } from "tiny-slider";
-import { Button } from "@mui/material";
 import {
   ArrowBackIos,
-  ArrowBackIosNew,
   ArrowForwardIos,
-  ThumbDown,
+  ArrowLeftRounded,
+  ArrowRightRounded,
   ThumbUp,
 } from "@mui/icons-material";
 import AppContext from "../utils/app-context";
@@ -20,17 +13,19 @@ import {
   arrayUnion,
   collection,
   doc,
-  getDocs,
   onSnapshot,
   query,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { IconButton, Skeleton } from "@mui/material";
 const Main = () => {
   const [swipes, setSwipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { uid } = useContext(AppContext) || { uid: null };
   const [date, setDate] = useState(new Date().toLocaleDateString("en-CA"));
+  const [currentIndex, setCurrentIndex] = useState(0);
   useEffect(() => {
     const unSubscribe = onSnapshot(
       query(collection(db, "swipes"), where("date", "==", date)),
@@ -40,22 +35,38 @@ const Main = () => {
           dummy.push({ docID: result.id, ...result.data() })
         );
         setSwipes(dummy);
+        setIsLoading(false);
       }
     );
     return () => unSubscribe();
   }, [date]);
   return (
     <main className="flex-1 flex flex-col p-3 bg-slate-900 rounded-lg">
-      <ToolBar {...{ date: date, setDate: setDate }} />
-      <Swipes {...{ swipes, uid }} />
-      <ActionBar {...{ swipes, uid }} />
+      <ToolBar {...{ date: date, setDate: setDate, setIsLoading }} />
+      {isLoading ? (
+        <>
+          <Skeleton variant="rounded" height={"100%"} />
+        </>
+      ) : swipes.length === 0 ? (
+        <div>
+          Nothing to show yet. Check for other days. Swipe and smile (-_-)
+        </div>
+      ) : (
+        <>
+          <Swipes {...{ swipes, uid, currentIndex }} />
+          {/* Shwow action bar only when there is slides */}
+          {swipes.length > 0 && (
+            <ActionBar {...{ swipes, uid, setCurrentIndex }} />
+          )}
+        </>
+      )}
     </main>
   );
 };
 
 export default Main;
 
-const Swipes = ({ uid, swipes }) => {
+const Swipes = ({ uid, swipes, currentIndex }) => {
   const reactToSwipe = async ({ type, docID, uid, existed }) => {
     const newData =
       type === "likes"
@@ -116,7 +127,14 @@ const Swipes = ({ uid, swipes }) => {
       </ul>
       <div className="absolute bottom-5 left-4 right-4 flex gap-4">
         {swipes.map((_, index) => (
-          <button className="h-1 flex-1 bg-blue-300" key={index}></button>
+          <button
+            className={
+              currentIndex === index
+                ? "h-1 flex-1 to-blue-500"
+                : "h-1 flex-1 bg-gray-300"
+            }
+            key={index}
+          ></button>
         ))}
       </div>
     </div>
@@ -139,25 +157,54 @@ const InfoSwipe = () => {
 };
 
 ////ToolBar
-const ToolBar = ({ date, setDate }) => {
+const ToolBar = ({ date, setDate, setIsLoading }) => {
   return (
     <div className="h-11 flex items-center">
+      <IconButton
+        onClick={() => {
+          setIsLoading(true);
+          setDate((_date) => {
+            const dateObj = new Date(_date);
+            dateObj.setDate(dateObj.getDate() - 1);
+            setDate(dateObj.toLocaleDateString("en-CA"));
+          });
+        }}
+        color="primary"
+        size="small"
+      >
+        <ArrowLeftRounded fontSize="large" />
+      </IconButton>
+
       <input
         type="date"
         title="choose date"
         className="bg-transparent text-gray-50 text-xs"
         value={date}
-        onChange={(e) => setDate(e.target.value)}
+        onChange={(e) => {
+          setIsLoading(true);
+          setDate(e.target.value);
+        }}
       />
-      <button className="text-xs text-white bg-blue-700 px-4 py-2 rounded-sm ">
-        Refresh
-      </button>
+      <IconButton
+        onClick={() => {
+          setIsLoading(true);
+          setDate((_date) => {
+            const dateObj = new Date(_date);
+            dateObj.setDate(dateObj.getDate() + 1);
+            setDate(dateObj.toLocaleDateString("en-CA"));
+          });
+        }}
+        color="primary"
+        size="small"
+      >
+        <ArrowRightRounded fontSize="large" />
+      </IconButton>
     </div>
   );
 };
 
 ////ActionBar
-const ActionBar = ({ swipes, uid }) => {
+const ActionBar = ({ swipes, uid, setCurrentIndex }) => {
   const user = useContext(AppContext);
   return (
     <div className="h-11 flex items-center justify-between">
@@ -166,12 +213,12 @@ const ActionBar = ({ swipes, uid }) => {
       ) : (
         <div>Sign in to do more.</div>
       )}
-      <SwipeActions {...{ swipes, uid }} />
+      <SwipeActions {...{ swipes, uid, setCurrentIndex }} />
     </div>
   );
 };
 
-const SwipeActions = ({ swipes, uid }) => {
+const SwipeActions = ({ swipes, uid, setCurrentIndex }) => {
   useEffect(() => {
     const slider = tns({
       container: ".slides",
@@ -190,15 +237,12 @@ const SwipeActions = ({ swipes, uid }) => {
     document.getElementById("prev").addEventListener("click", () => {
       slider.goTo("prev");
     });
-    return () => {
-      document.getElementById("next").removeEventListener("click", () => {
-        slider.goTo("next");
-      });
-      document.getElementById("prev").removeEventListener("click", () => {
-        slider.goTo("prev");
-      });
-    };
-  }, [swipes, uid]);
+    slider.events.on("indexChanged", (e) => {
+      if (e.index <= Array.from(swipes).length) {
+        setCurrentIndex(e.index - 1);
+      }
+    });
+  }, []);
   return (
     <div className="flex controls" id="controls">
       <button id="prev">

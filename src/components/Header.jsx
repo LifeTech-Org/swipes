@@ -2,6 +2,7 @@ import { AccountCircle } from "@mui/icons-material";
 import { auth, provider, signInWithRedirect, signOut } from "../../firebase";
 import { useContext } from "react";
 import AppContext from "../utils/app-context";
+import { Avatar, Badge, Chip } from "@mui/material";
 
 const Header = () => {
   const user = useContext(AppContext);
@@ -26,12 +27,12 @@ const SignInOptions = ({ isSignedIn }) => {
       data={
         isSignedIn
           ? {
-              Icon: AccountCircle,
+              type: "out",
               action: signout,
               text: "Sign out",
             }
           : {
-              Icon: AccountCircle,
+              type: "in",
               action: signIn,
               text: "Sign in with your Google account",
             }
@@ -41,12 +42,15 @@ const SignInOptions = ({ isSignedIn }) => {
 };
 
 const IconButton = ({ data }) => {
-  const { Icon, action, text } = data;
+  const { type, action, text } = data;
   return (
-    <button onClick={action}>
-      <Icon />
-      <span>{text}</span>
-    </button>
+    <Chip
+      avatar={type === "out" ? <Avatar /> : <Avatar alt="profile" src={""} />}
+      label={text}
+      variant="outlined"
+      onClick={action}
+      color="primary"
+    />
   );
 };
 export default Header;
