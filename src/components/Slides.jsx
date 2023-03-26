@@ -21,6 +21,7 @@ const Slides = ({ uid, onMount, startIndex, slides, communicateIndex }) => {
     setCurrentIndex(newIndex);
   };
   useEffect(() => {
+    setImgIsLoaded(false);
     if (uid) {
       onMount(currentIndex);
     }
@@ -76,7 +77,6 @@ const Slides = ({ uid, onMount, startIndex, slides, communicateIndex }) => {
       )}
       <div
         onClick={() => {
-          setImgIsLoaded(false);
           changeIndex({ type: "prev" });
         }}
         className="absolute top-0 left-0 bottom-0 w-1/2 bg-transparent cursor-pointer outline-none"
@@ -84,7 +84,6 @@ const Slides = ({ uid, onMount, startIndex, slides, communicateIndex }) => {
       ></div>
       <div
         onClick={() => {
-          setImgIsLoaded(false);
           changeIndex({ type: "next" });
         }}
         className="absolute top-0 right-0 bottom-0 w-1/2  bg-transparent cursor-pointer outline-none"
