@@ -48,6 +48,7 @@ const Admin = () => {
             date: Timestamp.now().toDate().toLocaleDateString("en-CA"),
             likes: [],
             dislikes: [],
+            seen: [],
             url: url,
           })
             .then(() => {

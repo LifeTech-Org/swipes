@@ -7,17 +7,22 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "tailwind": "npx tailwindcss -o ./src/dist/output.css --watch"
+    "tailwind": "npx tailwindcss -i ./src/index.css -o ./src/dist/output.css --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.14",
+    "arrow-keys-react": "^1.0.6",
+    "downloadjs": "^1.4.7",
     "firebase": "^9.18.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-insta-stories": "^2.5.4",
+    "react-lazy-load-image-component": "^1.5.6",
     "react-router-dom": "^6.9.0",
+    "swipe-react": "^1.0.4",
     "tiny-slider": "^2.9.4"
   },
   "devDependencies": {

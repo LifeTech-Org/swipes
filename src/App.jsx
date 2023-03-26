@@ -20,8 +20,8 @@ function App() {
   }, []);
   return (
     <AppContext.Provider value={user}>
-      <div className="relative flex items-center justify-center h-screen w-full">
-        <div className=" w-full sm:max-w-md h-5/6 mx-5 sm:mx-0 my-40 flex flex-col ">
+      <div className="relative flex items-center justify-center h-screen w-full bg-gray-800">
+        <div className=" w-full sm:max-w-md  mx-5 sm:mx-0 flex flex-col ">
           <Header />
           <Main />
           <Footer />
