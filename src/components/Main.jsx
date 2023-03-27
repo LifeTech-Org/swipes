@@ -25,9 +25,9 @@ import { db } from "../../firebase";
 import { CircularProgress, IconButton, Skeleton } from "@mui/material";
 import Slides from "./Slides";
 import Empty from "../assets/imgs/empty.svg";
-import download from "downloadjs";
 import { getNextDate, getPreviousDate, getToday } from "../utils/date";
 import SwipeReact from "swipe-react";
+import { info } from "./../utils/info";
 const Main = () => {
   const [swipes, setSwipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,6 +84,9 @@ const Main = () => {
             Nothing here for this day, check back later or check other days.
             <br /> (-_-)
           </p>
+          {/* <i className="text-xs text-blue-200 max-w-xs px-4 text-center">
+            {info[0]}
+          </i> */}
         </article>
       ) : (
         <>
@@ -172,9 +175,16 @@ const Swipes = ({ uid, swipes, date, setDate }) => {
                     Icon={icon}
                   />
                   {index === 0 && (
-                    <button className="flex-1" onClick={() => download(url)}>
-                      <Download></Download>
-                    </button>
+                    <a
+                      target="_blank"
+                      href={url}
+                      download
+                      className="text-blue-500"
+                    >
+                      <button className="flex-1">
+                        <Download />
+                      </button>
+                    </a>
                   )}
                 </React.Fragment>
               );

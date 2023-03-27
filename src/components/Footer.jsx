@@ -1,11 +1,13 @@
 const Footer = () => {
   return (
     <footer className="h-12 flex items-center">
-      <div className="text-sm text-blue-300 font-semibold">
-        Made with love and knowledge by{" "}
-      </div>{" "}
-      <address className="text-blue-400 text-sm font-semibold ml-2 !underline underline-offset-8">
-        <a href="https://wa.me/+2348149120163" title="Contact author">
+      <address>
+        <span className="text-xs text-blue-200 ">Design and develped by </span>
+        <a
+          href="https://wa.me/+2348149120163"
+          title="Contact author"
+          className="text-blue-300 text-sm font-semibold ml-2 !underline underline-offset-8"
+        >
           Samuel Ayetigbo
         </a>
       </address>

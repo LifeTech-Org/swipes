@@ -65,7 +65,9 @@ const Slides = ({ uid, onMount, startIndex, slides, communicateIndex }) => {
           (imgIsLoaded ? "fade-in " : "") +
           "w-auto h-auto max-w-full max-h-full"
         }
-        onLoad={() => setImgIsLoaded(true)}
+        onLoad={() => {
+          setImgIsLoaded(true);
+        }}
         style={{ display: imgIsLoaded ? "inline-flex" : "none" }}
       />
       {!imgIsLoaded && (
@@ -75,19 +77,22 @@ const Slides = ({ uid, onMount, startIndex, slides, communicateIndex }) => {
           </span>
         </div>
       )}
-      <div
-        onClick={() => {
-          changeIndex({ type: "prev" });
-        }}
-        className="absolute top-0 left-0 bottom-0 w-1/2 bg-transparent cursor-pointer outline-none"
-        style={{ borderTopRightRadius: "50%", borderBottomRightRadius: "50%" }}
-      ></div>
-      <div
-        onClick={() => {
-          changeIndex({ type: "next" });
-        }}
-        className="absolute top-0 right-0 bottom-0 w-1/2  bg-transparent cursor-pointer outline-none"
-      ></div>
+      {Array.from(slides).length > 1 && (
+        <>
+          <button
+            onClick={() => {
+              changeIndex({ type: "prev" });
+            }}
+            className="absolute top-0 left-0 bottom-0 w-1/4 bg-transparent cursor-pointer outline-none active:outline-none"
+          ></button>
+          <button
+            onClick={() => {
+              changeIndex({ type: "next" });
+            }}
+            className="absolute top-0 right-0 bottom-0 w-1/4  bg-transparent cursor-pointer outline-none active:outline-none"
+          ></button>
+        </>
+      )}
     </div>
   );
 };
