@@ -2,7 +2,9 @@ const Footer = () => {
   return (
     <footer className="h-12 flex items-center">
       <address>
-        <span className="text-xs text-blue-200 ">Design and develped by </span>
+        <span className="text-xs text-blue-200 ">
+          Designed and develped by{" "}
+        </span>
         <a
           href="https://wa.me/+2348149120163"
           title="Contact author"

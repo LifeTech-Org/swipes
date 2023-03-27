@@ -27,7 +27,6 @@ import Slides from "./Slides";
 import Empty from "../assets/imgs/empty.svg";
 import { getNextDate, getPreviousDate, getToday } from "../utils/date";
 import SwipeReact from "swipe-react";
-import { info } from "./../utils/info";
 const Main = () => {
   const [swipes, setSwipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
